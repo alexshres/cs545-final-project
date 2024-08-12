@@ -9,15 +9,20 @@ class MNISTNeural(nn.Module):
         # Will turn our 28 x 28 MNIST dataset into a 784 x 1 vector
         self.flatten = nn.Flatten()
 
+        # Network has 3 layers and we will be using the ReLU as an activation
+        # function
         self.linear_relu_stack = nn.Sequential(
                 nn.Linear(28*28, 300),
                 nn.ReLU(),
-                nn.Linear(300, 300),
+                nn.Linear(300, 100),
                 nn.ReLU(),
-                nn.Linear(300, 10),
+                nn.Linear(100, 50),
+                nn.ReLU(),
+                nn.Linear(50, 10),
         )
 
     def forward(self, x):
+        # Might not need to flatten data depending on how we are ingesting each picture
         x = self.flatten(x)
         logits = self.linear_relu_stack(x)
 
