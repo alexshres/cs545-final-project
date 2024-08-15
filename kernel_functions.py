@@ -127,7 +127,7 @@ def kernel_polynomial (
         degree: int = 1
     ) -> float:
     '''
-    Polynomial kernel function.  Performs K(x, y) = (γ<x, y> + r)^d on the 
+    Polynomial kernel function.  Performs K(x, y) = (gamma * dot(x, y) + r)^d on the 
     two vectors.  When constant and degree are not set it reverts to a linear 
     kernel
 
