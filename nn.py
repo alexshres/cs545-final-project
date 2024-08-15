@@ -41,7 +41,6 @@ class NeuralNetwork(nn.Module):
 
 
     def forward(self, x):
-        # Might not need to flatten data depending on how we are ingesting each picture
         x = self.flatten(x)
         logits = self.linear_relu_stack(x)
 
@@ -61,15 +60,18 @@ class MNISTNeural():
         
     def train(self): 
         size = len(self.train_dataloader.dataset)
+        # Put model in train mode: does not do much for us since we are not implementing
+        # dropout or batchnorm but still good practice
         self.model.train()
 
         for batch, (X, y) in enumerate(self.train_dataloader):
             pred = self.model(X)
             loss = self.loss_fn(pred, y)
 
-            # Backpropagation
-            loss.backward()
-            self.optimizer.step()
+            # Backpropagation; zero_grad zeroes out the gradients so that parameters are 
+            # updated accordingly, otherwise gradients include old gradients
+            loss.backward()         # Computes gradients
+            self.optimizer.step()   # updates parameters
             self.optimizer.zero_grad()
 
             if batch % 100 == 0:
@@ -77,6 +79,7 @@ class MNISTNeural():
                 print(f"loss: {loss:>7f} [{current:>5d}/{size:>5d}]")
 
     def test(self):
+        # Puts model in eval mode, again does not do much for us
         self.model.eval()
 
         size = len(self.test_dataloader.dataset)
@@ -84,6 +87,8 @@ class MNISTNeural():
         test_loss, correct = 0, 0
 
 
+        # no_grad disables gradient calculation so we are only testing on the data (no training
+        # is happening)
         with torch.no_grad():
             for X, y in self.test_dataloader:
                 pred = self.model(X)
