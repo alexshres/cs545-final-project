@@ -20,7 +20,11 @@ class ConfusionMatrix():
         Float:          Returns a value between 0 and 1 representing 
                         the accuracy of the matrix
         '''
-        return ( np.trace(self._matrix) / np.sum(self._matrix))
+        correct = np.trace(self._matrix)
+        total = np.sum(self._matrix)
+        if total == 0:
+            return 0.0
+        return correct / total
 
     def __getitem__ (self, key: int) -> int:
         return self._matrix[key]
