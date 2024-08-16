@@ -58,7 +58,9 @@ class MNISTNeural():
         self.test_dataloader = DataLoader(test_data, batch_size=batches)
 
         self.loss_fn = nn.CrossEntropyLoss()
-        self.optimizer = torch.optim.SGD(self.model.parameters(), lr=learning_rate)
+#        self.optimizer = torch.optim.SGD(self.model.parameters(), lr=learning_rate)
+        self.optimizer = torch.optim.Adam(self.model.parameters(), lr=learning_rate)
+
         
     def train(self): 
         size = len(self.train_dataloader.dataset)
@@ -72,9 +74,9 @@ class MNISTNeural():
 
             # Backpropagation; zero_grad zeroes out the gradients so that parameters are 
             # updated accordingly, otherwise gradients include old gradients
-            loss.backward()         # Computes gradients
-            self.optimizer.step()   # updates parameters
             self.optimizer.zero_grad()
+            loss.backward()                 # Computes gradients
+            self.optimizer.step()           # updates parameters
 
             if batch % 100 == 0:
                 loss, current = loss.item(), batch * self.batch_size + len(X) 
