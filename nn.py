@@ -58,15 +58,16 @@ class MNISTNeural():
         self.test_dataloader = DataLoader(test_data, batch_size=batches)
 
         self.loss_fn = nn.CrossEntropyLoss()
-#        self.optimizer = torch.optim.SGD(self.model.parameters(), lr=learning_rate)
         self.optimizer = torch.optim.Adam(self.model.parameters(), lr=learning_rate)
+        self.loss_per_epoch = [0] * epochs
+        self.acc_per_epoch = [0] * epochs
 
         
     def train(self): 
         size = len(self.train_dataloader.dataset)
-        # Put model in train mode: does not do much for us since we are not implementing
-        # dropout or batchnorm but still good practice
+        # Put model in train mode: implements dropout 
         self.model.train()
+        loss_amt = 0 
 
         for batch, (X, y) in enumerate(self.train_dataloader):
             pred = self.model(X)
@@ -79,11 +80,12 @@ class MNISTNeural():
             self.optimizer.step()           # updates parameters
 
             if batch % 100 == 0:
-                loss, current = loss.item(), batch * self.batch_size + len(X) 
-                print(f"loss: {loss:>7f} [{current:>5d}/{size:>5d}]")
+                loss_amt, current = loss.item(), batch * self.batch_size + len(X) 
+                print(f"loss: {loss_amt:>7f} [{current:>5d}/{size:>5d}]")
+
 
     def test(self):
-        # Puts model in eval mode, again does not do much for us
+        # Puts model in eval mode, does not do dropout
         self.model.eval()
 
         size = len(self.test_dataloader.dataset)
@@ -104,7 +106,7 @@ class MNISTNeural():
 
         print(f"Test Error: \n Accuracy: {(100 * correct):>0.1f}%, Avg loss: {test_loss:>8f} \n")
 
-        return (100 * correct)
+        return [test_loss, 100 * correct]
 
 
     def run(self):
@@ -112,8 +114,10 @@ class MNISTNeural():
         for t in range(self.epochs):
             print(f"Epoch {t+1}\n-----------------------------------")
             self.train()
-            accuracy = self.test()
+            metrics = self.test()
+            self.loss_per_epoch[t] = metrics[0]  
+            self.acc_per_epoch[t] = metrics[1]
 
         print("Finished")
-        return accuracy
+        return [self.loss_per_epoch, self.acc_per_epoch]
 
