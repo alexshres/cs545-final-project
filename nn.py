@@ -22,7 +22,7 @@ test_data = datasets.MNIST(
 
 class NeuralNetwork(nn.Module):
     def __init__(self):
-        super().__init__()
+        super(NeuralNetwork, self).__init__()
 
         # Will turn our 28 x 28 MNIST dataset into a 784 x 1 vector
         self.flatten = nn.Flatten()
@@ -32,8 +32,10 @@ class NeuralNetwork(nn.Module):
         self.linear_relu_stack = nn.Sequential(
                 nn.Linear(28*28, 300),
                 nn.ReLU(),
+                nn.Dropout(),             # adding dropout to second layer
                 nn.Linear(300, 100),
                 nn.ReLU(),
+                nn.Dropout(),             # adding dropout to third layer
                 nn.Linear(100, 50),
                 nn.ReLU(),
                 nn.Linear(50, 10),
@@ -56,7 +58,9 @@ class MNISTNeural():
         self.test_dataloader = DataLoader(test_data, batch_size=batches)
 
         self.loss_fn = nn.CrossEntropyLoss()
-        self.optimizer = torch.optim.SGD(self.model.parameters(), lr=learning_rate)
+#        self.optimizer = torch.optim.SGD(self.model.parameters(), lr=learning_rate)
+        self.optimizer = torch.optim.Adam(self.model.parameters(), lr=learning_rate)
+
         
     def train(self): 
         size = len(self.train_dataloader.dataset)
@@ -70,9 +74,9 @@ class MNISTNeural():
 
             # Backpropagation; zero_grad zeroes out the gradients so that parameters are 
             # updated accordingly, otherwise gradients include old gradients
-            loss.backward()         # Computes gradients
-            self.optimizer.step()   # updates parameters
             self.optimizer.zero_grad()
+            loss.backward()                 # Computes gradients
+            self.optimizer.step()           # updates parameters
 
             if batch % 100 == 0:
                 loss, current = loss.item(), batch * self.batch_size + len(X) 
@@ -100,12 +104,16 @@ class MNISTNeural():
 
         print(f"Test Error: \n Accuracy: {(100 * correct):>0.1f}%, Avg loss: {test_loss:>8f} \n")
 
+        return (100 * correct)
+
 
     def run(self):
+        accuracy = 0
         for t in range(self.epochs):
             print(f"Epoch {t+1}\n-----------------------------------")
             self.train()
-            self.test()
+            accuracy = self.test()
 
         print("Finished")
+        return accuracy
 
