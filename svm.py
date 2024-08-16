@@ -1,4 +1,4 @@
-'''Imports'''
+''' Imports '''
 from typing import Tuple, Callable
 from confusion_matrix import ConfusionMatrix
 from sklearn import svm
@@ -42,19 +42,15 @@ class SVM:
         '''
         return
 
-    def train (self, input_data, epochs: int = 1) -> None:
+    def train (self, input_data):
         '''
         train
         '''
-        for _ in epochs:
+        targets = np.array(input_data[:, -1])
+        input_data = input_data[:, :-1]
+        return self._classifier.fit(input_data, targets)
 
-            for line in input_data:
-
-                print(line)
-
-        return
-
-    def test (self) -> None:
+    def test (self, test_data) -> None:
         '''
         test
         '''

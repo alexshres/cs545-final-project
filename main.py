@@ -7,7 +7,6 @@ def main():
     # model.run()
 
     svm = SVM((1, 1), kernel_and)
-    print(svm.accuracy)
 
 
 
