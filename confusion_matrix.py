@@ -5,8 +5,8 @@ import numpy as np
 class ConfusionMatrix():
     '''Class for a confusion matrix'''
 
-    def __init__ (self, width: int = 1, height: int = 1) -> None:
-        self._matrix = np.zeros((width, height))
+    def __init__ (self, size: tuple) -> None:
+        self._matrix = np.zeros(size, dtype=int)
 
     def __str__ (self) -> str:
         return str(self._matrix).replace("[", " ").replace("]", " ")
