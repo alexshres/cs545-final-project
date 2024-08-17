@@ -1,5 +1,6 @@
 import torch
 import torch.nn.functional as F
+import matplotlib.pyplot as plt
 
 from torch import nn
 from torch.utils.data import DataLoader
@@ -53,6 +54,7 @@ class MNISTNeural():
         self.model = NeuralNetwork()
         self.epochs = epochs
         self.batch_size = batches
+        self.lr = learning_rate
 
         self.train_dataloader = DataLoader(training_data, batch_size=batches)
         self.test_dataloader = DataLoader(test_data, batch_size=batches)
@@ -119,5 +121,17 @@ class MNISTNeural():
             self.acc_per_epoch[t] = metrics[1]
 
         print("Finished")
+        self.plot_accuracy()
+
         return [self.loss_per_epoch, self.acc_per_epoch]
+
+
+    def plot_accuracy(self):
+        plt.figure(figsize=(10, 5))
+        plt.plot(range(1, self.epochs + 1), self.acc_per_epoch, marker='o', linestyle='-', color='b')
+        plt.xlabel('Epoch')
+        plt.ylabel('Accuracy (%)')
+        plt.title(f"Model Accuracy by Epoch Learning Rate={self.lr}")
+        plt.grid(True)
+        plt.savefig(f"acc_plot_{self.lr}.png")
 

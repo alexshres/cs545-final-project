@@ -1,7 +1,7 @@
 import nn
 
 def main():
-    learning_rates = [0.001] #[0.1, 0.01, 0.001]
+    learning_rates = [0.01, 0.001, 0.0001]
    
     accuracies = []
     for lr in learning_rates:
