@@ -6,10 +6,13 @@ def main():
     accuracies = []
     for lr in learning_rates:
         model = nn.MNISTNeural(learning_rate=lr, batches=64, epochs=20)
-        metrics = model.run()
+        metrics = model.train_and_validate()
+
 
         # Grabbing final accuracy at end of epoch and adding it to accuracies list
         accuracies.append(metrics[-1][-1])
+        
+        model.predict()
 
     for i, lr in enumerate(learning_rates):
         print(f"{lr=}\taccuracy={accuracies[i]}")
