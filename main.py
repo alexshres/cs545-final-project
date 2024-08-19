@@ -1,4 +1,4 @@
-# import nn
+import nn
 import numpy as np
 from svm import SVM
 
