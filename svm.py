@@ -38,11 +38,18 @@ class SVM:
         '''
         self.clear()
 
-    def run (self) -> None:
+    def run (self, test_data) -> None:
         '''
-        Run
+        Take inputs and create predictions using the SVM model. Populates a Confusion
+          matrix and returns the accuracy after testing.
+        
+        Input
+        np.ndarray:         testing data array
+
+        Output
+        float:              Accuracy of the model after testing.
         '''
-        return
+        return self.test(test_data)
 
     def train(self, input_data):
         '''
@@ -56,15 +63,24 @@ class SVM:
 
     def test (self, test_data) -> None:
         '''
-        test
+        Take inputs and create predictions using the SVM model. Populates a Confusion
+          matrix and returns the accuracy after testing.
+        
+        Input
+        np.ndarray:         testing data array
+
+        Output
+        float:              Accuracy of the model after testing.
         '''
 
         # Extract targets and features from the input data.  Normalize the features.
         targets, features = parse_data_line(test_data, normalization=NORMALIZATION)
 
+        # Input the data through the model, and predict the classification of the data.
         classifications = self._classifier.predict(features)
 
         # Populate the confusion matrix
+        self._confusion_matrix.reset()
         for target, prediction in zip(targets, classifications):
             self._confusion_matrix[target][prediction] += 1
 
