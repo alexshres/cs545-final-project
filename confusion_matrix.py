@@ -1,5 +1,7 @@
 '''Module providing mathematical matrix functionality.'''
 import numpy as np
+import seaborn as sns
+import matplotlib.pyplot as plt
 
 
 class ConfusionMatrix():
@@ -25,6 +27,20 @@ class ConfusionMatrix():
         if total == 0:
             return 0.0
         return correct / total
+    
+    @property
+    def heatmap (self) -> None:
+        '''
+        Plot the confusion matrix using seaborn heatmap.
+        '''
+        plt.figure(figsize=(10, 7))
+        # Create the heatmap directly from the numpy array
+        sns.heatmap(self._matrix, annot=True, fmt='d', cmap='Blues', cbar=True, 
+                    xticklabels=range(0, 9), yticklabels=range(0, 9))
+        plt.xlabel('Predicted Labels')
+        plt.ylabel('True Labels')
+        plt.title('Confusion Matrix')
+        plt.savefig("svm_confusion_matrix.png")
 
     def __getitem__ (self, key: int) -> int:
         return self._matrix[key]
@@ -43,3 +59,15 @@ class ConfusionMatrix():
         Reset the confusion matrix count.
         '''
         self.clear()
+    
+    def plot (self, labels, data) -> None:
+        '''
+        Plot accuracy over data points.
+        '''
+        plt.figure(figsize=(10, 5))
+        plt.plot(labels, data, marker='o', linestyle='-', color='b')
+        plt.xlabel('Number of Datapoints')
+        plt.ylabel('Accuracy (%)')
+        plt.title(f"SVM Accuracy Over Epochs")
+        plt.grid(True)
+        plt.savefig("svm_accuracy_over_time.png")

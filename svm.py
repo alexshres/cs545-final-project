@@ -10,11 +10,11 @@ class SVM:
     '''
     SVM class
     '''
-    def __init__(self, num_classes: int, kernel: Callable[..., float], shift: float = 1.0):
+    def __init__(self, num_classes: int, kernel: Callable[..., float], c_value: float = 1.0):
         self._confusion_matrix = ConfusionMatrix(size=(num_classes, num_classes))
         self._kernel = kernel
-        self._shift = shift
-        self._classifier = svm.SVC(kernel=self._kernel, C=self._shift)
+        self._c_value = c_value
+        self._classifier = svm.SVC(kernel=self._kernel, C=self._c_value)
 
     @property
     def accuracy (self) -> float:
@@ -55,6 +55,8 @@ class SVM:
         '''
         train
         '''
+        print("Beginning Training")
+
         if limit != -1:
             input_data = input_data[:limit]
 
@@ -75,6 +77,8 @@ class SVM:
         Output
         float:              Accuracy of the model after testing.
         '''
+        print("Beginning Testing")
+        
         if limit != -1:
             test_data = test_data[:limit]
 
