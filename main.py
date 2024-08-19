@@ -30,7 +30,7 @@ def main():
 
     svm = SVM(num_classes=10, kernel="linear")
     svm.train(training_data)
-    svm.test(testing_data)
+    svm.test(testing_data, limit=100)
 
     print(svm.accuracy)
     print(svm)

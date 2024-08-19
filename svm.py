@@ -51,17 +51,20 @@ class SVM:
         '''
         return self.test(test_data)
 
-    def train(self, input_data):
+    def train(self, input_data, limit: int = -1):
         '''
         train
         '''
+        if limit != -1:
+            input_data = input_data[:limit]
+
         # Extract targets and features from the input data.  Normalize the features.
         targets, features = parse_data_line(input_data, normalization=NORMALIZATION)
 
         # Train the classifier
         return self._classifier.fit(features, targets)
 
-    def test (self, test_data) -> None:
+    def test (self, test_data, limit: int = -1) -> None:
         '''
         Take inputs and create predictions using the SVM model. Populates a Confusion
           matrix and returns the accuracy after testing.
@@ -72,6 +75,8 @@ class SVM:
         Output
         float:              Accuracy of the model after testing.
         '''
+        if limit != -1:
+            test_data = test_data[:limit]
 
         # Extract targets and features from the input data.  Normalize the features.
         targets, features = parse_data_line(test_data, normalization=NORMALIZATION)
