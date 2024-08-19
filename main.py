@@ -1,5 +1,5 @@
-import nn
 import numpy as np
+import nn
 from svm import SVM
 
 
@@ -12,7 +12,7 @@ def main():
     model.run()
 
     learning_rates = [0.01, 0.001, 0.0001]
-   
+
     accuracies = []
     for lr in learning_rates:
         model = nn.MNISTNeural(learning_rate=lr, batches=64, epochs=20)
@@ -21,12 +21,12 @@ def main():
 
         # Grabbing final accuracy at end of epoch and adding it to accuracies list
         accuracies.append(metrics[-1][-1])
-        
+
         model.predict()
 
     for i, lr in enumerate(learning_rates):
         print(f"{lr=}\taccuracy={accuracies[i]}")
-    
+
 
     svm = SVM(num_classes=10, kernel="linear")
     svm.train(training_data)
